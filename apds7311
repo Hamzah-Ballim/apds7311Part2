@@ -1,0 +1,22 @@
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const app = express();
+
+app.use(express.json()); // Middleware to parse JSON
+
+// Registration route
+app.post('/register', async (req, res) => {
+  try {
+    const { password } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // Save hashedPassword to your database here
+    res.send('User registered with hashed password: ' + hashedPassword);
+  } catch (error) {
+    res.status(500).send('An error occurred');
+  }
+});
+
+const port = 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
+
